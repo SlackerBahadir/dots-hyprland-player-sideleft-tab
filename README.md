@@ -51,3 +51,85 @@ cd dots-hyprland-player-sideleft-tab
 chmod +x install.sh
 ./install.sh
 ```
+
+---
+
+## ❓ Troubleshooting
+
+### 1. Player tab works but other tabs is not working.
+**Because**: Default tabs codes returs plain objects, not widgets. You can fix them very easily tho.
+**Solution**:
+
+Remove these lines in the apiwidgets.js and toolbox.js files in the ~/.config/ags/modules/sideleft:
+
+for *toolbox.js*
+
+Remove these lines:
+
+```js
+export default Scrollable({
+    hscroll: "never",
+    vscroll: "automatic",
+    child: Box({
+        vertical: true,
+        className: 'spacing-v-10',
+        children: [
+            QuickScripts(),
+            Conversions(),
+            ColorPicker(),
+            Box({ vexpand: true }),
+            Name(),
+        ]
+    })
+});
+```
+
+and add these lines:
+
+```js
+export default () => {
+    return Widget.Scrollable({
+        hscroll: 'never',
+        vscroll: 'automatic',
+        child: Widget.Box({
+            vertical: true,
+            children: [
+                QuickScripts(),
+                Conversions(),
+                ColorPicker(),
+                Box({ vexpand: true }),
+                Name(),
+            ]
+        })
+    });
+}
+```
+
+---
+
+for *apiwidgets.js*
+
+Remove this lines:
+
+```js
+export default apiWidgets;
+```
+
+and add these lines:
+
+```js
+export default () => {
+    return Widget.Scrollable({
+        hscroll: 'never',
+        vscroll: 'automatic',
+        child: Widget.Box({
+            vertical: true,
+            children: [
+                apiWidgets,
+            ]
+        })
+    });
+}
+```
+
+With these, this should work!
