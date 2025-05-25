@@ -56,18 +56,19 @@ chmod +x install.sh
 
 ## ❓ Troubleshooting
 
-### 1. Player tab works but other tabs is not working.
+### 1. Player tab works, but other tabs do not show up
 
-**Because**: Default tabs codes returs plain objects, not widgets. You can fix them very easily tho.
+**Cause:**  
+The default tab modules (`apiwidgets.js` and `toolbox.js`) export plain objects instead of widget-returning functions. AGS expects modules to export *functions that return widgets*, not the widgets themselves.
 
-**Solution**:
+**Solution:**  
+You need to wrap your exports in arrow functions that return the widget. Here's how to fix it:
 
-Remove these lines in the apiwidgets.js and toolbox.js files in the ~/.config/ags/modules/sideleft:
+---
 
-for *toolbox.js*
+#### 🛠️ Fixing `toolbox.js`
 
-Remove these lines:
-
+**Replace this:**
 ```js
 export default Scrollable({
     hscroll: "never",
@@ -84,9 +85,9 @@ export default Scrollable({
         ]
     })
 });
-```
+````
 
-and add these lines:
+**With this:**
 
 ```js
 export default () => {
@@ -109,15 +110,15 @@ export default () => {
 
 ---
 
-for *apiwidgets.js*
+#### 🛠️ Fixing `apiwidgets.js`
 
-Remove this lines:
+**Replace this:**
 
 ```js
 export default apiWidgets;
 ```
 
-and add these lines:
+**With this:**
 
 ```js
 export default () => {
@@ -134,4 +135,6 @@ export default () => {
 }
 ```
 
-With these, this should work!
+---
+
+✅ Once you make these changes, the other tabs should render properly just like the Player tab.
