@@ -57,6 +57,7 @@ chmod +x install.sh
 ## ❓ Troubleshooting
 
 ### 1. Player tab works but other tabs is not working.
+
 **Because**: Default tabs codes returs plain objects, not widgets. You can fix them very easily tho.
 **Solution**:
 
