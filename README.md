@@ -2,11 +2,10 @@
 
 ## UNDERDEVELOPMENT!
 - This configration files in underdevelopment. There are some known bugs already and i try to solve them. But you can get the files and fix these if you want.
+### DO NOT USE install.sh
 ---
 
 A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https://github.com/Aylur/ags), designed for Hyprland and other Wayland-based environments. This module allows you to monitor and control music playback from multiple sources — all within your AGS sidebar.
-
-### DO NOT USE install.sh
 
 ---
 
