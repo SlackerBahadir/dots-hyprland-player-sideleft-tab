@@ -59,6 +59,7 @@ chmod +x install.sh
 ### 1. Player tab works but other tabs is not working.
 
 **Because**: Default tabs codes returs plain objects, not widgets. You can fix them very easily tho.
+
 **Solution**:
 
 Remove these lines in the apiwidgets.js and toolbox.js files in the ~/.config/ags/modules/sideleft:
