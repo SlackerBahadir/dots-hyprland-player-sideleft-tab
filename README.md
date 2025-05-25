@@ -80,7 +80,7 @@ export default Scrollable({
             QuickScripts(),
             Conversions(),
             ColorPicker(),
-            # ...Other widget elements you have
+            // ...Other widget elements you have
             Box({ vexpand: true }),
             Name(),
         ]
@@ -101,7 +101,7 @@ export default () => {
                 QuickScripts(),
                 Conversions(),
                 ColorPicker(),
-                # ...Other widget elements you have
+                // ...Other widget elements you have
                 Box({ vexpand: true }),
                 Name(),
             ]
@@ -131,7 +131,7 @@ export default () => {
             vertical: true,
             children: [
                 apiWidgets,
-                # ...Other widget elements you have
+                // ...Other widget elements you have
             ]
         })
     });
