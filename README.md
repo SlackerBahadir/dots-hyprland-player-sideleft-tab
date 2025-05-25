@@ -1,7 +1,6 @@
 # dots-hyprland-player-sideleft-tab 🎵
 
 ## UNDERDEVELOPMENT!
----
 - This configration files in underdevelopment. There are some known bugs already and i try to solve them. But you can get the files and fix these if you want.
 ---
 
