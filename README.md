@@ -14,7 +14,6 @@ A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https
   - And more!
 - ⏯ Playback controls: play, pause, skip
 - 💬 Metadata display: track title, artist, duration
-- ❤️ Stylish footer with GitHub badge
 - 🎨 Easy to customize and extend
 
 ---
@@ -40,8 +39,8 @@ A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/yourusername/ags-music-player.git
-cd ags-music-player
+git clone https://github.com/SlackerBahadir/dots-hyprland-player-sideleft-tab.git
+cd dots-hyprland-player-sideleft-tab
 chmod +x install.sh
 ./install.sh
 ```
