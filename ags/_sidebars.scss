@@ -1,0 +1,40 @@
+.volume-slider, .position-slider {
+    /* Slider track styling */
+    trough {
+        min-height: 6px;
+        min-width: 200px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+            
+    /* Slider progress/fill styling */
+    highlight {
+        min-height: 4px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #1cb2f2, #70b8d7);
+        margin: 1px;
+    }
+            
+    /* Slider handle/thumb styling */
+    slider {
+        min-height: 14px;
+        min-width: 14px;
+        border-radius: 50%;
+        background: #c7c7c7;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin: -4px 0;
+        opacity: 0.8;
+    }
+            
+    slider:hover {
+        background: #1976D2;
+        opacity: 1;
+        transition: all 0.2s ease;
+    }
+            
+    slider:active {
+        background: #1565C0;
+    }
+}
