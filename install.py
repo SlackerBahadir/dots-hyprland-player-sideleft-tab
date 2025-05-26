@@ -54,7 +54,7 @@ if os.path.isdir(CONFIG_DIR):
 
     shutil.copytree(CONFIG_DIR, BACKUP_DIR_FOR_NOW)
 else:
-    print(f"{RED}[!] AGS CONFIG DIRECTORY ({CONFIG_DIR}) NOT FOUNDED. Exiting...{NC}")
+    print(f"{RED}[!] AGS CONFIG DIRECTORY ({CONFIG_DIR}) NOT FOUND. Exiting...{NC}")
     raise FileNotFoundError(f"{CONFIG_DIR} not founded.")
 
 if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(TOOLS_DIR):
