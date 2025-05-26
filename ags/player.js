@@ -2,6 +2,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
+import { hasPlasmaIntegration } from '../.miscutils/system.js';
 import BadiCo from './tools/badico.js';
 
 const { Box, Button, Label, Slider, Scrollable, Revealer, Icon } = Widget;
@@ -12,9 +13,77 @@ let players = [];
 let currentVolume = 50;
 let playersContainer;
 
+// Filter function to remove unnecessary browser buses when plasma integration is enabled
+function isRealPlayer(playerName) {
+    return (
+        // Remove unnecessary native buses from browsers if there's plasma integration
+        !(hasPlasmaIntegration && playerName.includes('firefox')) &&
+        !(hasPlasmaIntegration && playerName.includes('chromium')) &&
+        // playerctld just copies other buses and we don't need duplicates
+        !playerName.includes('playerctld') &&
+        // Non-instance mpd bus
+        !(playerName.endsWith('.mpd') && !playerName.endsWith('MediaPlayer2.mpd'))
+    );
+}
+
+// Clean up player name for display
+const cleanPlayerName = (playerName) => {
+    // Remove .instance... suffix
+    let cleanName = playerName.replace(/\.instance\d+$/, '');
+    
+    // Remove common prefixes that aren't needed for display
+    cleanName = cleanName.replace(/^org\.mpris\.MediaPlayer2\./, '');
+    
+    // Handle specific cases for better display names
+    const nameMap = {
+        'spotify': 'Spotify',
+        'firefox': 'Firefox',
+        'chromium': 'Chromium',
+        'vlc': 'VLC',
+        'mpv': 'MPV',
+        'rhythmbox': 'Rhythmbox',
+        'clementine': 'Clementine',
+        'amarok': 'Amarok',
+        'audacious': 'Audacious',
+        'banshee': 'Banshee',
+        'deadbeef': 'DeaDBeeF',
+        'gmusicbrowser': 'GMusicBrowser',
+        'guayadeque': 'Guayadeque',
+        'juk': 'JuK',
+        'lollypop': 'Lollypop',
+        'museeks': 'Museeks',
+        'nuclear': 'Nuclear',
+        'olivia': 'Olivia',
+        'parlatype': 'Parlatype',
+        'pragha': 'Pragha',
+        'quodlibet': 'Quod Libet',
+        'rhythmbox3': 'Rhythmbox',
+        'sayonara': 'Sayonara',
+        'strawberry': 'Strawberry',
+        'tomahawk': 'Tomahawk',
+        'yarock': 'Yarock',
+        'ncspot': 'Ncspot',
+        'cmus': 'cmus',
+        'moc': 'MOC',
+        'mpd': 'MPD'
+    };
+    
+    // Convert to lowercase for lookup, but preserve original case if not found
+    const lowerName = cleanName.toLowerCase();
+    const displayName = nameMap[lowerName] || cleanName;
+    
+    // Capitalize first letter if it's not already a known name
+    if (!nameMap[lowerName] && displayName.length > 0) {
+        return displayName.charAt(0).toUpperCase() + displayName.slice(1);
+    }
+    
+    return displayName;
+};
+
 // Create player data structure
 const createPlayerData = (playerName) => ({
     name: playerName,
+    displayName: cleanPlayerName(playerName),
     isPlaying: false,
     currentTrack: { title: 'No track playing', artist: '', album: '', artUrl: '' },
     isShuffled: false,
@@ -24,16 +93,55 @@ const createPlayerData = (playerName) => ({
     interval: null, // Store interval ID for cleanup
 });
 
-// Volume control slider - Fixed AGS v1 syntax
 const volumeSlider = Slider({
-    className: 'sidebar-slider',
+    className: 'sidebar-slider volume-slider',
     hexpand: true,
-    drawValue: false,  // Changed from draw_value
+    drawValue: false,
     min: 0,
     max: 100,
     step: 5,
     value: currentVolume,
-    on_change: ({ value }) => {  // Changed from onChange
+    css: `
+        /* Slider track styling */
+        trough {
+            min-height: 8px;
+            min-width: 100px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Slider progress/fill styling */
+        highlight {
+            min-height: 6px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            margin: 1px;
+        }
+        
+        /* Slider handle/thumb styling */
+        slider {
+            min-height: 16px;
+            min-width: 16px;
+            border-radius: 50%;
+            background: #4CAF50;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin: -4px 0;
+        }
+        
+        slider:hover {
+            background: #45a049;
+            transform: scale(1.1);
+            transition: all 0.2s ease;
+        }
+        
+        slider:active {
+            background: #3d8b40;
+            transform: scale(1.2);
+        }
+    `,
+    onChange: ({ value }) => {
         currentVolume = Math.round(value);
         execAsync(['pactl', 'set-sink-volume', '@DEFAULT_SINK@', `${currentVolume}%`]).catch(() => {
             console.log('Failed to set volume');
@@ -125,12 +233,31 @@ const updatePlayersContainer = () => {
 const createPlayerWidget = (playerName) => {
     const playerData = createPlayerData(playerName);
     
-    // Album art
-    const albumArt = Icon({
-        className: 'sidebar-albumart',
-        size: 72,
-        icon: 'audio-x-generic-symbolic',
+    // Album art container with rounded styling - Enhanced with better rounded corners
+    const albumArtContainer = Box({
+        className: 'sidebar-albumart-container',
+        css: `
+            border-radius: 16px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+        `,
+        child: Icon({
+            className: 'sidebar-albumart',
+            size: 72,
+            icon: 'audio-x-generic-symbolic',
+            css: `
+                border-radius: 16px;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            `,
+        }),
     });
+    
+    // Reference to the actual icon for updates
+    const albumArt = albumArtContainer.child;
 
     // Track info labels
     const trackTitle = Label({
@@ -158,15 +285,63 @@ const createPlayerWidget = (playerName) => {
         xalign: 0,
     });
 
+    // Position slider - Fixed CSS for AGS v1 with proper styling
     const positionSlider = Slider({
-        className: 'sidebar-slider margin-top-10',
+        className: 'sidebar-slider position-slider',
         hexpand: true,
-        drawValue: false,  // Changed from draw_value
+        drawValue: false,
         min: 0,
         max: 100,
         step: 1,
         value: 0,
-        on_change: ({ value }) => {
+        // Proper CSS styling for AGS v1 position slider
+        css: `
+            min-height: 24px;
+            min-width: 200px;
+            margin: 4px 0;
+            
+            /* Slider track styling */
+            trough {
+                min-height: 6px;
+                min-width: 200px;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+            }
+            
+            /* Slider progress/fill styling */
+            highlight {
+                min-height: 4px;
+                border-radius: 4px;
+                background: linear-gradient(90deg, #2196F3, #1976D2);
+                margin: 1px;
+            }
+            
+            /* Slider handle/thumb styling */
+            slider {
+                min-height: 14px;
+                min-width: 14px;
+                border-radius: 50%;
+                background: #2196F3;
+                border: 2px solid #ffffff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                margin: -4px 0;
+                opacity: 0.8;
+            }
+            
+            slider:hover {
+                background: #1976D2;
+                opacity: 1;
+                transform: scale(1.1);
+                transition: all 0.2s ease;
+            }
+            
+            slider:active {
+                background: #1565C0;
+                transform: scale(1.2);
+            }
+        `,
+        onChange: ({ value }) => {
             if (playerData.duration > 0) {
                 const position = (value / 100) * playerData.duration;
                 execAsync(['playerctl', '-p', playerName, 'position', position.toString()]).catch(() => {
@@ -183,9 +358,10 @@ const createPlayerWidget = (playerName) => {
     });
 
     // Control buttons
+    const playPauseIcon = MaterialIcon('play_arrow', 'large');
     const playPauseButton = Button({
         className: 'sidebar-controlbtnr',
-        child: MaterialIcon('play_arrow', 'large'),
+        child: playPauseIcon,
         tooltipText: 'Play/Pause',
         onClicked: () => {
             execAsync(['playerctl', '-p', playerName, 'play-pause']).catch(() => {
@@ -292,10 +468,10 @@ const createPlayerWidget = (playerName) => {
         setup: setupCursorHover,
     });
 
-    // Player name label
+    // Player name label - Now uses the cleaned display name
     const playerNameLabel = Label({
         className: 'txt-subtext txt-smallie',
-        label: playerName.charAt(0).toUpperCase() + playerName.slice(1),
+        label: playerData.displayName,
         xalign: 0,
     });
 
@@ -372,20 +548,48 @@ const createPlayerWidget = (playerName) => {
                 trackArtist.label = playerData.currentTrack.artist;
                 trackAlbum.label = playerData.currentTrack.album;
                 
-                // Update album art
+                // Update album art with rounded corners
                 if (playerData.currentTrack.artUrl) {
                     downloadAlbumArt(playerData.currentTrack.artUrl, playerData.currentTrack.title)
                         .then(fileName => {
                             if (fileName) {
-                                albumArt.icon = fileName;
+                                // Use CSS background-image for better rounded corner support
+                                albumArt.css = `
+                                    border-radius: 16px;
+                                    background-image: url('${fileName}');
+                                    background-size: cover;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    min-width: 72px;
+                                    min-height: 72px;
+                                `;
+                                albumArt.icon = ''; // Clear the icon to show background image
                             } else {
+                                albumArt.css = `
+                                    border-radius: 16px;
+                                    background-size: cover;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                `;
                                 albumArt.icon = 'audio-x-generic-symbolic';
                             }
                         })
                         .catch(() => {
+                            albumArt.css = `
+                                border-radius: 16px;
+                                background-size: cover;
+                                background-position: center;
+                                background-repeat: no-repeat;
+                            `;
                             albumArt.icon = 'audio-x-generic-symbolic';
                         });
                 } else {
+                    albumArt.css = `
+                        border-radius: 16px;
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    `;
                     albumArt.icon = 'audio-x-generic-symbolic';
                 }
             })
@@ -398,11 +602,26 @@ const createPlayerWidget = (playerName) => {
         execAsync(['playerctl', '-p', playerName, 'status'])
             .then(status => {
                 playerData.isPlaying = status.trim() === 'Playing';
-                playPauseButton.child = MaterialIcon(playerData.isPlaying ? 'pause' : 'play_arrow', 'large');
+                const newIcon = playerData.isPlaying ? 'pause' : 'play_arrow';
+                
+                // Update the icon label if it has a label property
+                if (playPauseIcon && playPauseIcon.label !== undefined) {
+                    playPauseIcon.label = newIcon;
+                }
+                // Alternative method: recreate the child
+                else {
+                    playPauseButton.child = MaterialIcon(newIcon, 'large');
+                }
+                
                 playPauseButton.toggleClassName('sidebar-controlbtn-enabled', playerData.isPlaying);
             })
             .catch(() => {
-                playPauseButton.child = MaterialIcon('play_arrow', 'large');
+                // Reset to play icon on error
+                if (playPauseIcon && playPauseIcon.label !== undefined) {
+                    playPauseIcon.label = 'play_arrow';
+                } else {
+                    playPauseButton.child = MaterialIcon('play_arrow', 'large');
+                }
                 playPauseButton.toggleClassName('sidebar-controlbtn-enabled', false);
             });
 
@@ -449,7 +668,7 @@ const createPlayerWidget = (playerName) => {
                     Box({
                         className: 'spacing-h-10',
                         children: [
-                            albumArt,
+                            albumArtContainer,
                             Box({
                                 vertical: true,
                                 hexpand: true,
@@ -505,11 +724,13 @@ const createPlayerWidget = (playerName) => {
     return playerWidget;
 };
 
-// Get available players and create widgets
+// Get available players and create widgets - Now with plasma integration filtering
 const getAvailablePlayers = () => {
     return execAsync(['playerctl', '-l'])
         .then(output => {
-            return output.trim().split('\n').filter(player => player.length > 0);
+            const allPlayers = output.trim().split('\n').filter(player => player.length > 0);
+            // Filter players based on plasma integration
+            return allPlayers.filter(player => isRealPlayer(player));
         })
         .catch(() => []);
 };
@@ -533,12 +754,12 @@ const updateSystemVolume = () => {
         });
 };
 
-// Update volume every 2 seconds
-setInterval(updateSystemVolume, 2000);
+// Update volume every 1 seconds
+setInterval(updateSystemVolume, 1000);
 updateSystemVolume(); // Initial update
 
 const playerWidget = () => {
-    console.log('Creating enhanced player widget with multiple player support (AGS v1)');
+    console.log('Creating enhanced player widget with multiple player support and plasma integration filtering (AGS v1)');
     
     playersContainer = Box({
         vertical: true,
@@ -582,8 +803,8 @@ const playerWidget = () => {
         }
     };
 
-    // Update players list every 3 seconds (more frequent for better responsiveness)
-    setInterval(updatePlayers, 3000);
+    // Update players list every 1 seconds (more frequent for better responsiveness)
+    setInterval(updatePlayers, 1000);
     updatePlayers(); // Initial update
 
     return Box({
@@ -638,8 +859,6 @@ const playerWidget = () => {
                     ],
                 }),
             }),
-            
-            // BadiCo widget fixed at the bottom - always visible
             Box({
                 className: 'sidebar-group',
                 vertical: true,
