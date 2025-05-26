@@ -285,7 +285,7 @@ const createPlayerWidget = (playerName) => {
         xalign: 0,
     });
 
-    // Position slider - Fixed CSS for AGS v1 with proper styling
+    // Now its really fixed.
     const positionSlider = Slider({
         className: 'sidebar-slider position-slider',
         hexpand: true,
@@ -294,53 +294,6 @@ const createPlayerWidget = (playerName) => {
         max: 100,
         step: 1,
         value: 0,
-        // Proper CSS styling for AGS v1 position slider
-        css: `
-            min-height: 24px;
-            min-width: 200px;
-            margin: 4px 0;
-            
-            /* Slider track styling */
-            trough {
-                min-height: 6px;
-                min-width: 200px;
-                border-radius: 6px;
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.15);
-            }
-            
-            /* Slider progress/fill styling */
-            highlight {
-                min-height: 4px;
-                border-radius: 4px;
-                background: linear-gradient(90deg, #2196F3, #1976D2);
-                margin: 1px;
-            }
-            
-            /* Slider handle/thumb styling */
-            slider {
-                min-height: 14px;
-                min-width: 14px;
-                border-radius: 50%;
-                background: #2196F3;
-                border: 2px solid #ffffff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                margin: -4px 0;
-                opacity: 0.8;
-            }
-            
-            slider:hover {
-                background: #1976D2;
-                opacity: 1;
-                transform: scale(1.1);
-                transition: all 0.2s ease;
-            }
-            
-            slider:active {
-                background: #1565C0;
-                transform: scale(1.2);
-            }
-        `,
         onChange: ({ value }) => {
             if (playerData.duration > 0) {
                 const position = (value / 100) * playerData.duration;
