@@ -50,7 +50,7 @@ timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
 BACKUP_DIR_FOR_NOW = os.path.join(BACKUP_DIR, timestamp)
 
 if os.path.isdir(CONFIG_DIR):
-    print(f"{YELLOW}[+] Backuping files from {CONFIG_DIR} to {BACKUP_DIR_FOR_NOW}...{NC}")
+    print(f"{GREEN}[+] Backuping files from {CONFIG_DIR} to {BACKUP_DIR_FOR_NOW}...{NC}")
 
     shutil.copytree(CONFIG_DIR, BACKUP_DIR_FOR_NOW)
 else:
@@ -73,14 +73,18 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
     }
 
     for src, dst in files_to_copy.items():
-        print(f"{YELLOW}[+] Copying {src} to {dst}...{NC}")
+        print(f"{GREEN}[+] Copying {src} to {dst}...{NC}")
 
         if src == SCRIPT_SIDEBARS_SCSS_FILE:
             with open(src, 'r') as code:
                 code_content = code.read()
 
-            with open(dst, 'a') as file:
-                file.write(f"\n{code_content}\n")
+            try:
+                with open(dst, 'a') as file:
+                    file.write(f"\n{code_content}\n")
+            except FileNotFoundError:
+                print(f"{RED}[!] _sidebars.scss file is not exists. This file structure may be does not conform to the dots-hyprland structure.{NC}")
+                print(f"{RED}[!] Not copied {src} to {dst}{NC}")
 
             continue
 
