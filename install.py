@@ -75,6 +75,15 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
     for src, dst in files_to_copy.items():
         print(f"{YELLOW}[+] Copying {src} to {dst}...{NC}")
 
+        if src == SCRIPT_SIDEBARS_SCSS_FILE:
+            with open(src, 'r') as code:
+                code_content = code.read()
+
+            with open(dst, 'a') as file:
+                file.write(f"\n{code_content}\n")
+
+            continue
+
         if os.path.exists(dst):
             print(f"{RED}[!] {dst} exists. Removing...{NC}")
 
@@ -85,7 +94,7 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
 
             shutil.copy(src, dst)
 
-print(f"{GREEN}[#] Installation completed. Have fun! <3")
+print(f"{GREEN}[#] Installation completed. Have fun! <3{NC}")
 print("""
 ⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
