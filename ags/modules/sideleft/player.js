@@ -101,46 +101,6 @@ const volumeSlider = Slider({
     max: 100,
     step: 5,
     value: currentVolume,
-    css: `
-        /* Slider track styling */
-        trough {
-            min-height: 8px;
-            min-width: 100px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        
-        /* Slider progress/fill styling */
-        highlight {
-            min-height: 6px;
-            border-radius: 6px;
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            margin: 1px;
-        }
-        
-        /* Slider handle/thumb styling */
-        slider {
-            min-height: 16px;
-            min-width: 16px;
-            border-radius: 50%;
-            background: #4CAF50;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            margin: -4px 0;
-        }
-        
-        slider:hover {
-            background: #45a049;
-            transform: scale(1.1);
-            transition: all 0.2s ease;
-        }
-        
-        slider:active {
-            background: #3d8b40;
-            transform: scale(1.2);
-        }
-    `,
     onChange: ({ value }) => {
         currentVolume = Math.round(value);
         execAsync(['pactl', 'set-sink-volume', '@DEFAULT_SINK@', `${currentVolume}%`]).catch(() => {
