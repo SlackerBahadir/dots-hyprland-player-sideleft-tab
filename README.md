@@ -29,7 +29,9 @@ A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https
 
 > The player integrates seamlessly into the sidebar layout:
 
-### New screenshots on the way! 🚛💨
+![onlysideleftplayertab](assets/screenshots/onlysideleftplayertab.png)
+
+![fullscreenmultipleplayers](assets/screenshots/fullscreenmultipleplayers.png)
 
 ---
 
