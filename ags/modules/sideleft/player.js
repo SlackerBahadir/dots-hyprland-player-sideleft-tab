@@ -120,7 +120,7 @@ const downloadAlbumArt = async (url, trackId) => {
     if (!url || url === '') return null;
     
     try {
-        const cacheDir = `${Utils.HOME}/.cache/ags/media/`;
+        const cacheDir = `${Utils.HOME}/.cache/ags/media`;
         const fileName = `${trackId.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
         const filePath = `${cacheDir}${fileName}`;
         
