@@ -137,8 +137,6 @@ export default () => {
 }
 ```
 
----
-
 ✅ Once you make these changes, the other tabs should render properly just like the Player tab.
 
 ---
@@ -156,7 +154,7 @@ Feel free to fork, tweak styles via SCSS, or even add new tabs with your own wid
 
 ---
 
-🧠 Final Thoughts
+## 🧠 Final Thoughts
 
 If you're building a modular and elegant AGS sidebar, this widget is a great starting point. With full control over the interface, it's your music — your way.
 
