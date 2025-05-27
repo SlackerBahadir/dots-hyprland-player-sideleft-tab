@@ -41,7 +41,7 @@ SCRIPT_SIDEBARS_SCSS_FILE = os.path.join(SCRIPT_SCSS_DIR, "_sidebars.scss")
 print(f"{RED}[!] This installation executable is only suitable for the configuration of the dots-hyprland github repo."
       f"If you do not know what you are doing, do not use this installation executable.{NC}")
 
-choice = input(f"{YELLOW}Are you sure you want to continue? (y/n){NC}")
+choice = input(f"{YELLOW}Are you sure you want to continue? (y/n):{NC} ").strip().lower()
 
 if choice != "y":
     print(f"{GREEN}[#] Exiting...{NC}")
