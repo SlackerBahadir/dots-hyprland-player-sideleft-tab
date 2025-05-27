@@ -2,7 +2,11 @@
 
 A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https://github.com/Aylur/ags), designed for Hyprland and other Wayland-based environments. This module allows you to monitor and control music playback from multiple sources — all within your AGS sidebar.
 
-### ❗ **NOTE**: This configration files only tested for [dots-hyprland](https://github.com/end-4/dots-hyprland) dot files. Don't expect install.sh script will magically make things work. But if you use dots-hyprland, feel free to use install.sh
+### ❗ **NOTE** 
+> This configuration is tested only with the dots-hyprland setup.
+> The install.py script is tailored for that specific structure — it won't magically adapt to other configs.
+> However, feel free to modify and adapt it to your own environment if needed.
+
 
 ---
 
@@ -15,6 +19,7 @@ A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https
   - Plasma browser integration
   - And more!
 - ⏯ Playback controls: play, pause, skip
+- 🔊 Volume and music timestamp control
 - 💬 Metadata display: track title, artist, duration
 - 🎨 Easy to customize and extend
 
@@ -43,8 +48,7 @@ A sleek and customizable music player widget for [Aylur's GTK Shell (AGS)](https
 ```bash
 git clone https://github.com/SlackerBahadir/dots-hyprland-player-sideleft-tab.git
 cd dots-hyprland-player-sideleft-tab
-chmod +x install.sh
-./install.sh
+./install.py
 ```
 
 ---
@@ -136,3 +140,27 @@ export default () => {
 ---
 
 ✅ Once you make these changes, the other tabs should render properly just like the Player tab.
+
+---
+
+## 🙌 Credits
+
+This project builds upon the fantastic work in the [dots-hyprland](https://github.com/end-4/dots-hyprland) repo.
+Special thanks to the AGS and Hyprland communities for making modular Linux UIs a joy to build.
+
+---
+
+## 🔧 Want to customize more?
+
+Feel free to fork, tweak styles via SCSS, or even add new tabs with your own widgets. Contributions and ideas are welcome!
+
+---
+
+🧠 Final Thoughts
+
+If you're building a modular and elegant AGS sidebar, this widget is a great starting point. With full control over the interface, it's your music — your way.
+
+---
+
+## 🐧 License
+[MIT](LICENSE/)
