@@ -1,6 +1,7 @@
 import shutil
 import os
 from datetime import datetime
+import sys
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -15,7 +16,7 @@ SCRIPT_MODULES_DIR = os.path.join(SCRIPT_AGS_DIR, "modules")
 SCRIPT_SIDELEFT_DIR = os.path.join(SCRIPT_MODULES_DIR, "sideleft")
 SCRIPT_TOOLS_DIR = os.path.join(SCRIPT_SIDELEFT_DIR, "tools")
 SCRIPT_SCSS_DIR = os.path.join(SCRIPT_AGS_DIR, "scss")
-SCRIPT_USER_OPTIONS_JSONC_FILE = os.path.join(SCRIPT_DIR, "user_options.jsonc")
+SCRIPT_USER_OPTIONS_JSONC_FILE = os.path.join(SCRIPT_AGS_DIR, "user_options.jsonc")
 
 # USER RELATED PATHS
 
@@ -44,7 +45,7 @@ choice = input(f"{YELLOW}Are you sure you want to continue? (y/n){NC}")
 
 if choice != "y":
     print(f"{GREEN}[#] Exiting...{NC}")
-    exit(0)
+    sys.exit(0)
 
 timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
 BACKUP_DIR_FOR_NOW = os.path.join(BACKUP_DIR, timestamp)
@@ -98,7 +99,11 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
 
             shutil.copy(src, dst)
 
-print(f"{GREEN}[#] Installation completed. Have fun! <3{NC}")
+else:
+    print(f"{RED}[!] This {CONFIG_DIR} file structure does not match the dots-hyprland github repo. Exiting...")
+    sys.exit(1)
+
+print(f"{GREEN}[#] Installation completed. Please restart you AGS. Have fun! <3{NC}")
 print("""
 ⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
