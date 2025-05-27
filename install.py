@@ -40,7 +40,7 @@ SCRIPT_SIDELEFT_JS_FILE = os.path.join(SCRIPT_SIDELEFT_DIR, "sideleft.js")
 SCRIPT_FOOTER_JS_FILE = os.path.join(SCRIPT_TOOLS_DIR, "badico.js")
 SCRIPT_SIDEBARS_SCSS_FILE = os.path.join(SCRIPT_SCSS_DIR, "_sidebars.scss")
 
-print(f"{RED}[!] This installation executable is only suitable for the configuration of the dots-hyprland github repo."
+print(f"{RED}[!] This installation executable is only suitable for the configuration of the dots-hyprland github repo.",
       f"If you do not know what you are doing, do not use this installation executable.{NC}")
 
 choice = input(f"{YELLOW}Are you sure you want to continue? (y/n):{NC} ").strip().lower()
@@ -76,8 +76,6 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
     }
 
     for src, dst in files_to_copy.items():
-        print(f"{GREEN}[+] Copying {src} to {dst}...{NC}")
-
         if src == SCRIPT_SIDEBARS_SCSS_FILE:
             with open(src, 'r') as code:
                 code_content = code.read()
@@ -95,9 +93,14 @@ if os.path.isdir(MODULES_DIR) and os.path.isdir(SIDELEFT_DIR) and os.path.isdir(
             print(f"{RED}[!] {dst} exists. Removing...{NC}")
 
             os.remove(dst)
+
+            print(f"{GREEN}[+] Copying {src} to {dst}...{NC}")
+
             shutil.copy(src, dst)
         else:
             print(f"{RED}[!] {dst} doesn't exists. This file structure may be does not conform to the dots-hyprland structure.{NC}")
+            
+            print(f"{GREEN}[+] Copying {src} to {dst}...{NC}")
 
             shutil.copy(src, dst)
 
