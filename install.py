@@ -108,7 +108,7 @@ else:
     print(f"{RED}[!] This {CONFIG_DIR} file structure does not match the dots-hyprland github repo. Exiting...")
     sys.exit(1)
 
-print(f"{GREEN}[#] Installation completed. Please restart you AGS. Have fun! <3{NC}")
+print(f"{GREEN}[#] Installation completed. Please restart your AGS. Have fun! <3{NC}")
 print("""
 ⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
